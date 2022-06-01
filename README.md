@@ -12,3 +12,6 @@ Currently, it only supports one table to store books. The UI has functionality f
 ### Dependencies
 - [sqlclient](https://pypi.org/project/sqlclient/)
 - [PyQt5](https://pypi.org/project/PyQt5/)
+
+### UI
+![Books table](https://i.imgur.com/UJOt5aK.png)
