@@ -1,67 +1,27 @@
-from PyQt5.QtWidgets import *
-from PyQt5 import uic
+"""
+@Author: Ali Rihan
+@Link: github.com/a13r1/Library
+"""
+
 import sys
+
 import MySQLdb
+from PyQt5 import uic
+from PyQt5.QtWidgets import *
 
 
-class UI(QMainWindow):
+class GUI(QMainWindow):
     def __init__(self):
-        super(UI, self).__init__()
+        super(GUI, self).__init__()
         uic.loadUi('main.ui', self)
-        self.db_connect()
+        # connect to library database
+        self.db = MySQLdb.connect(host='localhost', user='root', passwd='', db='library')
+        self.cursor = self.db.cursor()
+        # GUI preprocessing
         self.show_all_books()
         self.handle_buttons()
         self.tabWidget.tabBar().setVisible(False)
         self.show()
-
-    def db_connect(self):
-        self.db = MySQLdb.connect(host='localhost', user='root', passwd='', db='library')
-        self.cur = self.db.cursor()
-
-    def handle_buttons(self):
-        self.pushButton.clicked.connect(self.add_book)
-        self.pushButton_6.clicked.connect(self.show_books_tab)
-        self.pushButton_2.clicked.connect(self.show_daily_movements_tab)
-        self.pushButton_3.clicked.connect(self.show_authors_tab)
-        self.pushButton_4.clicked.connect(self.show_settings_tab)
-        self.pushButton_7.clicked.connect(self.delete_book)
-        self.pushButton_9.clicked.connect(self.search_book)
-        self.pushButton_8.clicked.connect(self.update_book)
-
-    def show_all_books(self):
-        self.tableWidget.setRowCount(0)
-        self.cur.execute('select * from books')
-        data = self.cur.fetchall()
-        for row, form in enumerate(data):
-            self.tableWidget.insertRow(row)
-            for col, item in enumerate(form):
-                self.tableWidget.setItem(row, col, QTableWidgetItem(str(item)))
-
-    def add_book(self):
-        name = self.lineEdit_1.text()
-        barcode = self.lineEdit_2.text()
-        author = self.lineEdit_3.text()
-        publisher = self.lineEdit_4.text()
-        self.cur.execute('insert into books (name, barcode, author, publisher) values(%s, %s, %s, %s)',
-                         (name, barcode, author, publisher))
-        self.db.commit()
-        QMessageBox.information(self, 'Add book', 'Book is added successfully')
-        self.show_all_books()
-        self.lineEdit_1.setText('')
-        self.lineEdit_2.setText('')
-        self.lineEdit_3.setText('')
-        self.lineEdit_4.setText('')
-
-    def delete_book(self):
-        del_msg = QMessageBox.question(self, 'Delete a book', 'Are you sure?', QMessageBox.Yes | QMessageBox.No,
-                                       defaultButton=QMessageBox.No)
-        if del_msg == QMessageBox.Yes:
-            id = self.lineEdit_5.text()
-            self.cur.execute('delete from books where id = %s', id)
-            self.db.commit()
-            QMessageBox.information(self, 'Delete book', 'Book is deleted successfully')
-            self.show_all_books()
-            self.lineEdit_5.setText('')
 
     def show_books_tab(self):
         self.tabWidget.setCurrentIndex(0)
@@ -75,33 +35,113 @@ class UI(QMainWindow):
     def show_settings_tab(self):
         self.tabWidget.setCurrentIndex(3)
 
+    def show_all_books(self):
+        """
+        fetch and display all books in the GUI table
+        :return: None
+        """
+        self.tableWidget.setRowCount(0)  # clear the table
+        self.cursor.execute('SELECT * FROM books')
+        books = self.cursor.fetchall()
+        for i, record in enumerate(books):
+            self.tableWidget.insertRow(i)
+            for j, field in enumerate(record):
+                self.tableWidget.setItem(i, j, QTableWidgetItem(str(field)))
+
+    def insert_book(self):
+        """
+        insert a new book in books table
+        :return: None
+        """
+        # prepare query string
+        name = self.add_name.text()
+        barcode = self.add_barcode.text()
+        author = self.add_author.text()
+        publisher = self.add_publisher.text()
+        query_str = f"INSERT INTO books (name, barcode, author, publisher) VALUES" \
+                    f"('{name}', '{barcode}', '{author}', '{publisher}')"
+        self.cursor.execute(query_str)
+        self.db.commit()
+        QMessageBox.information(self, 'Add a new book', 'Book is added successfully!')
+        self.show_all_books()  # update GUI table
+        # clear input
+        self.add_name.setText('')
+        self.add_barcode.setText('')
+        self.add_author.setText('')
+        self.add_publisher.setText('')
+
     def search_book(self):
-        id = self.lineEdit_10.text()
-        self.cur.execute('select * from books where id = %s', id)
-        data = self.cur.fetchone()
-        self.lineEdit_6.setText(data[1])
-        self.lineEdit_7.setText(data[2])
-        self.lineEdit_8.setText(data[3])
-        self.lineEdit_9.setText(data[4])
+        """
+        search for a book and display its information
+        :return: None
+        """
+        book_id = self.update_id.text()
+        query_str = f'SELECT * FROM books WHERE id = {book_id}'
+        self.cursor.execute(query_str)
+        record = self.cursor.fetchone()
+        # display information to be modified
+        self.update_name.setText(record[1])
+        self.update_barcode.setText(record[2])
+        self.update_author.setText(record[3])
+        self.update_publisher.setText(record[4])
 
     def update_book(self):
-        id = self.lineEdit_10.text()
-        name = self.lineEdit_6.text()
-        barcode = self.lineEdit_7.text()
-        author = self.lineEdit_8.text()
-        publisher = self.lineEdit_9.text()
-        self.cur.execute('''update books set name = %s, barcode = %s, author = %s, publisher = %s 
-        where id = %s''', (name, barcode, author, publisher, id))
+        """
+        update existing book information
+        :return: None
+        """
+        # prepare query string
+        book_id = self.update_id.text()
+        name = self.update_name.text()
+        barcode = self.update_barcode.text()
+        author = self.update_author.text()
+        publisher = self.update_publisher.text()
+        query_str = f"UPDATE books SET name = '{name}', barcode = '{barcode}', author = '{author}'," \
+                    f"publisher = '{publisher}' WHERE id = {book_id}"
+        self.cursor.execute(query_str)
         self.db.commit()
-        self.show_all_books()
-        QMessageBox.information(self, 'Update book', 'Book is updated successfully')
-        self.lineEdit_6.setText('')
-        self.lineEdit_7.setText('')
-        self.lineEdit_8.setText('')
-        self.lineEdit_9.setText('')
-        self.lineEdit_10.setText('')
+        self.show_all_books()  # update GUI table
+        QMessageBox.information(self, 'Update a book', 'Book is updated successfully!')
+        # clear input
+        self.update_id.setText('')
+        self.update_name.setText('')
+        self.update_barcode.setText('')
+        self.update_author.setText('')
+        self.update_publisher.setText('')
+
+    def delete_book(self):
+        """
+        delete an existing book from books table
+        :return: None
+        """
+        del_msg = QMessageBox.question(self, 'Delete a book', 'Are you sure you want to delete the book?',
+                                       QMessageBox.Yes | QMessageBox.No,
+                                       defaultButton=QMessageBox.No)
+        if del_msg == QMessageBox.Yes:
+            book_id = self.delete_id.text()
+            query_str = f'DELETE FROM books WHERE id = {book_id}'
+            self.cursor.execute(query_str)
+            self.db.commit()
+            QMessageBox.information(self, 'Delete a book', 'Book is deleted successfully!')
+            self.show_all_books()  # update GUI table
+            self.delete_id.setText('')  # clear input
+
+    def handle_buttons(self):
+        """
+        connect buttons click events to their corresponding actions
+        :return: None
+        """
+        self.add_button.clicked.connect(self.insert_book)
+        self.search_button.clicked.connect(self.search_book)
+        self.update_button.clicked.connect(self.update_book)
+        self.delete_button.clicked.connect(self.delete_book)
+        self.books_button.clicked.connect(self.show_books_tab)
+        self.daily_movements_button.clicked.connect(self.show_daily_movements_tab)
+        self.authors_button.clicked.connect(self.show_authors_tab)
+        self.settings_button.clicked.connect(self.show_settings_tab)
 
 
-app = QApplication(sys.argv)
-UIWindow = UI()
-app.exec_()
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    gui = GUI()
+    app.exec_()
