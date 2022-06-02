@@ -648,7 +648,7 @@ QAbstractSpinBox {
         <property name="title">
          <string>Add a new book</string>
         </property>
-        <widget class="QLineEdit" name="lineEdit_1">
+        <widget class="QLineEdit" name="add_name">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -672,7 +672,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lineEdit_2">
+        <widget class="QLineEdit" name="add_barcode">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -696,7 +696,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lineEdit_3">
+        <widget class="QLineEdit" name="add_author">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -720,7 +720,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lineEdit_4">
+        <widget class="QLineEdit" name="add_publisher">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -744,7 +744,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="add_button">
          <property name="geometry">
           <rect>
            <x>380</x>
@@ -786,7 +786,7 @@ QAbstractSpinBox {
         <property name="title">
          <string>Update a book</string>
         </property>
-        <widget class="QLineEdit" name="lineEdit_6">
+        <widget class="QLineEdit" name="update_name">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -810,7 +810,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lineEdit_7">
+        <widget class="QLineEdit" name="update_barcode">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -834,7 +834,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lineEdit_8">
+        <widget class="QLineEdit" name="update_author">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -858,7 +858,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lineEdit_9">
+        <widget class="QLineEdit" name="update_publisher">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -882,7 +882,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_8">
+        <widget class="QPushButton" name="update_button">
          <property name="geometry">
           <rect>
            <x>380</x>
@@ -906,7 +906,7 @@ QAbstractSpinBox {
           <string>Update book</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lineEdit_10">
+        <widget class="QLineEdit" name="update_id">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -930,7 +930,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_9">
+        <widget class="QPushButton" name="search_button">
          <property name="geometry">
           <rect>
            <x>380</x>
@@ -972,7 +972,7 @@ QAbstractSpinBox {
         <property name="title">
          <string>Delete a book</string>
         </property>
-        <widget class="QLineEdit" name="lineEdit_5">
+        <widget class="QLineEdit" name="delete_id">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -996,7 +996,7 @@ QAbstractSpinBox {
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QPushButton" name="pushButton_7">
+        <widget class="QPushButton" name="delete_button">
          <property name="geometry">
           <rect>
            <x>380</x>
@@ -1040,7 +1040,7 @@ QAbstractSpinBox {
      </attribute>
     </widget>
    </widget>
-   <widget class="QPushButton" name="pushButton_2">
+   <widget class="QPushButton" name="daily_movements_button">
     <property name="geometry">
      <rect>
       <x>730</x>
@@ -1064,7 +1064,7 @@ QAbstractSpinBox {
      <string>Daily Movements</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_3">
+   <widget class="QPushButton" name="authors_button">
     <property name="geometry">
      <rect>
       <x>730</x>
@@ -1088,7 +1088,7 @@ QAbstractSpinBox {
      <string>Authors</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_4">
+   <widget class="QPushButton" name="settings_button">
     <property name="geometry">
      <rect>
       <x>730</x>
@@ -1136,7 +1136,7 @@ QAbstractSpinBox {
      <string>Close</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton_6">
+   <widget class="QPushButton" name="books_button">
     <property name="geometry">
      <rect>
       <x>730</x>
@@ -1183,7 +1183,7 @@ QAbstractSpinBox {
    <hints>
     <hint type="sourcelabel">
      <x>876</x>
-     <y>234</y>
+     <y>261</y>
     </hint>
     <hint type="destinationlabel">
      <x>888</x>
